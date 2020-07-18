@@ -3,8 +3,9 @@ PLANNING:
 - Strategy
     - sort a list of unknown size without storing more than a single value at a time. 
     - use a modified cocktail sort (modified bubble sort) to move left to right in the list, then move right to left.
+    - after each sorting iteration, a check is performed to see if list is sorted
     - we are not permitted to know/use the length of the list or store more than a single value at a time, so this method accommodates that rule.
-- PHASE I: initial sort using a while loop
+- PHASE I: Sort using a while loop
     - move from first element using a while loop (left to right)
         - if the card held is smaller than the card at the index position being examined, swap the card
         - this will move the largest value to the end of the list
@@ -119,10 +120,15 @@ class SortingRobot:
     def sort(self):
         # light on is the condition for continuing loop
         self.set_light_on()
+
         while self.light_is_on():
+            # ensure that each sorting iteration begins with the
+            while self.can_move_left():
+                self.move_left()
             # turn light off initially
             self.set_light_off()
-            self.swap_item()  # take first item
+            # take first item
+            self.swap_item()
 
             # left to right
             while self.can_move_right():
@@ -134,7 +140,7 @@ class SortingRobot:
                 if self.compare_item() == 1:  # if held item is larger than list item, swap
                     self.swap_item()
                 self.move_left()
-            # check to see if list is sorted by comparing pairs of values
+            # check to see if list is sorted by comparing pairs of values by comparing each value to the one following
             while self.can_move_right():
                 self.move_right()
                 if self.compare_item() == 1:
@@ -145,11 +151,6 @@ class SortingRobot:
                 self.move_right()
                 self.swap_item()
             self.swap_item()  # place last held item back in list
-            # check to see if values were found out of order (is the light on?)
-            # if the list is not completely sorted, the loop will continue so the robot needs to move back to the left side of the list
-            if self.light_is_on():
-                while self.can_move_left():
-                    self.move_left()
 
 
 if __name__ == "__main__":
